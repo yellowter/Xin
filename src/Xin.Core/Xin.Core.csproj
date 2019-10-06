@@ -3,6 +3,8 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <PackageProjectUrl>https://github.com/yellowter/Xin</PackageProjectUrl>
+        <Description>基本辅助类库</Description>
+        <RepositoryUrl>https://github.com/yellowter/Xin</RepositoryUrl>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
