@@ -10,17 +10,17 @@ namespace Xin.Core.Extensions
         /// <summary>
         ///     将指定的长整值转换为对应的字节大小
         /// </summary>
-        /// <param name="FileSize"></param>
+        /// <param name="fileSize"></param>
         /// <returns></returns>
-        public static string ToFileSize(this long FileSize)
+        public static string ToFileSize(this long fileSize)
         {
-            if (FileSize < 0x400L) return string.Format("{0}Byte", FileSize);
-            if (FileSize >= 0x400L && FileSize <= 0x100000L)
-                return string.Format("{0:F2}KB", FileSize * 1.0 / 0x400L).TrimEnd('0').TrimEnd('.');
-            if (FileSize >= 0x100000L && FileSize <= 0x40000000L)
-                return string.Format("{0:F2}MB", FileSize * 1.0 / 0x100000L).TrimEnd('0').TrimEnd('.');
-            if (FileSize >= 0x40000000L)
-                return string.Format("{0:F2}GB", FileSize * 1.0 / 0x40000000L).TrimEnd('0').TrimEnd('.');
+            if (fileSize < 0x400L) return $"{fileSize}Byte";
+            if (fileSize >= 0x400L && fileSize <= 0x100000L)
+                return $"{fileSize * 1.0 / 0x400L:F2}KB".TrimEnd('0').TrimEnd('.');
+            if (fileSize >= 0x100000L && fileSize <= 0x40000000L)
+                return $"{fileSize * 1.0 / 0x100000L:F2}MB".TrimEnd('0').TrimEnd('.');
+            if (fileSize >= 0x40000000L)
+                return $"{fileSize * 1.0 / 0x40000000L:F2}GB".TrimEnd('0').TrimEnd('.');
             return "";
         }
 
@@ -40,6 +40,7 @@ namespace Xin.Core.Extensions
             }
             catch
             {
+                // ignored
             }
 
             return defaultValue;
@@ -61,6 +62,7 @@ namespace Xin.Core.Extensions
             }
             catch
             {
+                // ignored
             }
 
             return defaultValue;

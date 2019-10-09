@@ -17,10 +17,8 @@ namespace Xin.Core.Extensions
         /// <returns></returns>
         public static string ReplaceNonValidChars(this string filenameNoDir, string replaceWith)
         {
-            if (string.IsNullOrEmpty(filenameNoDir))
-                return string.Empty;
+            return string.IsNullOrEmpty(filenameNoDir) ? string.Empty : Regex.Replace(filenameNoDir, @"[\<\>\/\\\|\:""\*\?\r\n]", replaceWith, RegexOptions.Compiled);
             //替换这9个字符<>/\|:"*? 以及 回车换行
-            return Regex.Replace(filenameNoDir, @"[\<\>\/\\\|\:""\*\?\r\n]", replaceWith, RegexOptions.Compiled);
         }
 
         /// <summary>
@@ -70,28 +68,25 @@ namespace Xin.Core.Extensions
         {
             if (string.IsNullOrEmpty(cnChar))
                 return string.Empty;
-            var arrCN = Encoding.Default.GetBytes(cnChar);
-            if (arrCN.Length > 1)
+            var arrCn = Encoding.Default.GetBytes(cnChar);
+            if (arrCn.Length <= 1) return cnChar;
+            int area = arrCn[0];
+            int pos = arrCn[1];
+            var code = (area << 8) + pos;
+            int[] areacode =
             {
-                int area = arrCN[0];
-                int pos = arrCN[1];
-                var code = (area << 8) + pos;
-                int[] areacode =
-                {
-                    45217, 45253, 45761, 46318, 46826, 47010, 47297, 47614, 48119, 48119, 49062, 49324, 49896, 50371,
-                    50614, 50622, 50906, 51387, 51446, 52218, 52698, 52698, 52698, 52980, 53689, 54481
-                };
-                for (var i = 0; i < 26; i++)
-                {
-                    var max = 55290;
-                    if (i != 25) max = areacode[i + 1];
-                    if (areacode[i] <= code && code < max) return Encoding.Default.GetString(new[] {(byte) (65 + i)});
-                }
-
-                return "*";
+                45217, 45253, 45761, 46318, 46826, 47010, 47297, 47614, 48119, 48119, 49062, 49324, 49896, 50371,
+                50614, 50622, 50906, 51387, 51446, 52218, 52698, 52698, 52698, 52980, 53689, 54481
+            };
+            for (var i = 0; i < 26; i++)
+            {
+                var max = 55290;
+                if (i != 25) max = areacode[i + 1];
+                if (areacode[i] <= code && code < max) return Encoding.Default.GetString(new[] {(byte) (65 + i)});
             }
 
-            return cnChar;
+            return "*";
+
         }
 
         #region 字符串操作
@@ -103,9 +98,7 @@ namespace Xin.Core.Extensions
         /// <returns></returns>
         public static int GetRealLength(this string source)
         {
-            if (string.IsNullOrEmpty(source))
-                return 0;
-            return Encoding.Default.GetByteCount(source);
+            return string.IsNullOrEmpty(source) ? 0 : Encoding.Default.GetByteCount(source);
         }
 
         /// <summary>
@@ -120,26 +113,24 @@ namespace Xin.Core.Extensions
                 return string.Empty;
 
             //判断字符串长度是否大于截断长度
-            if (Encoding.Default.GetByteCount(source) > resultLength)
+            if (Encoding.Default.GetByteCount(source) <= resultLength) return source;
+            //初始化
+            int i = 0, j = 0;
+
+            //为汉字或全脚符号长度加2否则加1
+            foreach (var newChar in source)
             {
-                //初始化
-                int i = 0, j = 0;
-
-                //为汉字或全脚符号长度加2否则加1
-                foreach (var newChar in source)
+                if (newChar > 127)
+                    i += 2;
+                else
+                    i++;
+                if (i > resultLength)
                 {
-                    if (newChar > 127)
-                        i += 2;
-                    else
-                        i++;
-                    if (i > resultLength)
-                    {
-                        source = source.Substring(0, j);
-                        break;
-                    }
-
-                    j++;
+                    source = source.Substring(0, j);
+                    break;
                 }
+
+                j++;
             }
 
             return source;
@@ -202,7 +193,7 @@ namespace Xin.Core.Extensions
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static bool IsPublicIP(this string source)
+        public static bool IsPublicIp(this string source)
         {
             return Regex.IsMatch(source,
                 @"^(((25[0-5]|2[0-4][0-9]|19[0-1]|19[3-9]|18[0-9]|17[0-1]|17[3-9]|1[0-6][0-9]|1[1-9]|[2-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]))|(192\.(25[0-5]|2[0-4][0-9]|16[0-7]|169|1[0-5][0-9]|1[7-9][0-9]|[1-9][0-9]|[0-9]))|(172\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|1[0-5]|3[2-9]|[4-9][0-9]|[0-9])))\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$");
@@ -213,7 +204,7 @@ namespace Xin.Core.Extensions
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static bool IsIP(this string source)
+        public static bool IsIp(this string source)
         {
             return Regex.IsMatch(source,
                 @"^(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])$");
@@ -340,11 +331,9 @@ namespace Xin.Core.Extensions
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static string FromGBToUTF8(this string source)
+        public static string FromGbToUtf8(this string source)
         {
-            if (string.IsNullOrEmpty(source))
-                return string.Empty;
-            return Encoding.GetEncoding("GB2312").GetString(Encoding.UTF8.GetBytes(source));
+            return string.IsNullOrEmpty(source) ? string.Empty : Encoding.GetEncoding("GB2312").GetString(Encoding.UTF8.GetBytes(source));
         }
 
         /// <summary>
@@ -352,11 +341,9 @@ namespace Xin.Core.Extensions
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static string FromUTF8ToGB(this string source)
+        public static string FromUtf8ToGb(this string source)
         {
-            if (string.IsNullOrEmpty(source))
-                return string.Empty;
-            return Encoding.UTF8.GetString(Encoding.GetEncoding("GB2312").GetBytes(source));
+            return string.IsNullOrEmpty(source) ? string.Empty : Encoding.UTF8.GetString(Encoding.GetEncoding("GB2312").GetBytes(source));
         }
 
 
@@ -448,7 +435,7 @@ namespace Xin.Core.Extensions
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static string ToUTF8(this string source)
+        public static string ToUtf8(this string source)
         {
             if (string.IsNullOrEmpty(source))
                 return string.Empty;
@@ -524,9 +511,7 @@ namespace Xin.Core.Extensions
         /// <returns></returns>
         public static string WrapWithCData(this string source)
         {
-            if (string.IsNullOrEmpty(source))
-                return string.Empty;
-            return string.Format("<![CDATA[{0}]]>", source);
+            return string.IsNullOrEmpty(source) ? string.Empty : $"<![CDATA[{source}]]>";
         }
 
         /// <summary>
@@ -552,13 +537,11 @@ namespace Xin.Core.Extensions
             for (var i = 0; i < c.Length; i++)
             {
                 var b = Encoding.Unicode.GetBytes(c, i, 1);
-                if (b.Length == 2)
-                    if (b[1] == 255)
-                    {
-                        b[0] = (byte) (b[0] + 32);
-                        b[1] = 0;
-                        c[i] = Encoding.Unicode.GetChars(b)[0];
-                    }
+                if (b.Length != 2) continue;
+                if (b[1] != 255) continue;
+                b[0] = (byte) (b[0] + 32);
+                b[1] = 0;
+                c[i] = Encoding.Unicode.GetChars(b)[0];
             }
 
             var returnString = new string(c);
@@ -576,13 +559,11 @@ namespace Xin.Core.Extensions
             for (var i = 0; i < c.Length; i++)
             {
                 var b = Encoding.Unicode.GetBytes(c, i, 1);
-                if (b.Length == 2)
-                    if (b[1] == 0)
-                    {
-                        b[0] = (byte) (b[0] - 32);
-                        b[1] = 255;
-                        c[i] = Encoding.Unicode.GetChars(b)[0];
-                    }
+                if (b.Length != 2) continue;
+                if (b[1] != 0) continue;
+                b[0] = (byte) (b[0] - 32);
+                b[1] = 255;
+                c[i] = Encoding.Unicode.GetChars(b)[0];
             }
 
             var returnString = new string(c);
@@ -611,13 +592,8 @@ namespace Xin.Core.Extensions
         /// <returns></returns>
         public static int ToInt32(this string source, int defaultValue)
         {
-            if (!string.IsNullOrEmpty(source))
-            {
-                int result;
-                if (int.TryParse(source, out result)) return result;
-            }
-
-            return defaultValue;
+            if (string.IsNullOrEmpty(source)) return defaultValue;
+            return int.TryParse(source, out var result) ? result : defaultValue;
         }
 
         /// <summary>
@@ -638,13 +614,8 @@ namespace Xin.Core.Extensions
         /// <returns></returns>
         public static long ToInt64(this string source, long defaultValue)
         {
-            if (!string.IsNullOrEmpty(source))
-            {
-                long result;
-                if (long.TryParse(source, out result)) return result;
-            }
-
-            return defaultValue;
+            if (string.IsNullOrEmpty(source)) return defaultValue;
+            return long.TryParse(source, out var result) ? result : defaultValue;
         }
 
         /// <summary>
@@ -665,13 +636,8 @@ namespace Xin.Core.Extensions
         /// <returns></returns>
         public static double ToDouble(this string source, double defaultValue)
         {
-            if (!string.IsNullOrEmpty(source))
-            {
-                double result;
-                if (double.TryParse(source, out result)) return result;
-            }
-
-            return defaultValue;
+            if (string.IsNullOrEmpty(source)) return defaultValue;
+            return double.TryParse(source, out var result) ? result : defaultValue;
         }
 
         /// <summary>
@@ -692,13 +658,8 @@ namespace Xin.Core.Extensions
         /// <returns></returns>
         public static DateTime ToDateTime(this string source, DateTime defaultValue)
         {
-            if (!string.IsNullOrEmpty(source))
-            {
-                DateTime result;
-                if (DateTime.TryParse(source, out result)) return result;
-            }
-
-            return defaultValue;
+            if (string.IsNullOrEmpty(source)) return defaultValue;
+            return DateTime.TryParse(source, out var result) ? result : defaultValue;
         }
 
         /// <summary>
@@ -708,13 +669,8 @@ namespace Xin.Core.Extensions
         /// <returns></returns>
         public static bool ToBoolean(this string source)
         {
-            if (!string.IsNullOrEmpty(source))
-            {
-                bool result;
-                if (bool.TryParse(source, out result)) return result;
-            }
-
-            return false;
+            if (string.IsNullOrEmpty(source)) return false;
+            return bool.TryParse(source, out var result) && result;
         }
 
         /// <summary>
@@ -726,15 +682,16 @@ namespace Xin.Core.Extensions
         /// <returns></returns>
         public static T ToEnum<T>(this string source, T defaultValue)
         {
-            if (!string.IsNullOrEmpty(source))
-                try
-                {
-                    var value = (T) Enum.Parse(typeof(T), source, true);
-                    if (Enum.IsDefined(typeof(T), value)) return value;
-                }
-                catch
-                {
-                }
+            if (string.IsNullOrEmpty(source)) return defaultValue;
+            try
+            {
+                var value = (T) Enum.Parse(typeof(T), source, true);
+                if (Enum.IsDefined(typeof(T), value)) return value;
+            }
+            catch
+            {
+                // ignored
+            }
 
             return defaultValue;
         }
@@ -749,14 +706,15 @@ namespace Xin.Core.Extensions
         /// <returns></returns>
         public static T ToEnumExt<T>(this string source, T defaultValue)
         {
-            if (!string.IsNullOrEmpty(source))
-                try
-                {
-                    return (T) Enum.Parse(typeof(T), source, true);
-                }
-                catch
-                {
-                }
+            if (string.IsNullOrEmpty(source)) return defaultValue;
+            try
+            {
+                return (T) Enum.Parse(typeof(T), source, true);
+            }
+            catch
+            {
+                // ignored
+            }
 
             return defaultValue;
         }

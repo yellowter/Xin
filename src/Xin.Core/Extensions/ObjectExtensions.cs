@@ -98,11 +98,10 @@ namespace Xin.Core.Extensions
         {
             if (null != source)
             {
-                if (source is float)
-                    return (float) source;
+                if (source is float f)
+                    return f;
 
-                float result;
-                if (float.TryParse(source.ToString(), out result)) return result;
+                if (float.TryParse(source.ToString(), out var result)) return result;
             }
 
             return defaultValue;
@@ -121,8 +120,7 @@ namespace Xin.Core.Extensions
                 if (source is double)
                     return (double) source;
 
-                double result;
-                if (double.TryParse(source.ToString(), out result)) return result;
+                if (double.TryParse(source.ToString(), out var result)) return result;
             }
 
             return defaultValue;
@@ -141,8 +139,7 @@ namespace Xin.Core.Extensions
                 if (source is byte)
                     return (byte) source;
 
-                byte result;
-                if (byte.TryParse(source.ToString(), out result)) return result;
+                if (byte.TryParse(source.ToString(), out var result)) return result;
             }
 
             return defaultValue;
@@ -161,8 +158,7 @@ namespace Xin.Core.Extensions
                 if (source is DateTime)
                     return (DateTime) source;
 
-                DateTime result;
-                if (DateTime.TryParse(source.ToString(), out result)) return result;
+                if (DateTime.TryParse(source.ToString(), out var result)) return result;
             }
 
             return defaultValue;

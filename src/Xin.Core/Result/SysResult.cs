@@ -3,7 +3,7 @@
     /// <summary>
     ///     返回结果集
     /// </summary>
-    public abstract class SysResult
+    public class SysResult
     {
         /// <summary>
         ///     错误码

@@ -2,6 +2,9 @@
 
 namespace Xin.Core.Pinyin
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class Pinyin
     {
         /// <summary>
@@ -69,7 +72,7 @@ namespace Xin.Core.Pinyin
         /// <summary>
         ///     取和拼音相同的汉字列表
         /// </summary>
-        /// <param name="Pinyin">编码为UTF8的拼音</param>
+        /// <param name="pinyin">编码为UTF8的拼音</param>
         /// <returns>取拼音相同的汉字列表，如拼音“ai”将会返回“唉爱……”等</returns>
         public static string GetChineseText(string pinyin)
         {
@@ -86,7 +89,7 @@ namespace Xin.Core.Pinyin
         /// <summary>
         ///     取和拼音相同的汉字列表，编码同参数encoding
         /// </summary>
-        /// <param name="Pinyin">编码为encoding的拼音</param>
+        /// <param name="pinyin">编码为encoding的拼音</param>
         /// <param name="encoding">编码</param>
         /// <returns>返回编码为encoding的拼音为pinyin的汉字列表，如拼音“ai”将会返回“唉爱……”等</returns>
         public static string GetChineseText(string pinyin, Encoding encoding)
@@ -119,6 +122,7 @@ namespace Xin.Core.Pinyin
         ///     返回单个字符的汉字拼音
         /// </summary>
         /// <param name="ch">编码为encoding的中文字符</param>
+        /// <param name="encoding"></param>
         /// <returns>编码为encoding的ch对应的拼音</returns>
         public static string GetPinyin(char ch, Encoding encoding)
         {

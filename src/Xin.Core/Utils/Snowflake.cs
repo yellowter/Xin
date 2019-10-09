@@ -2,6 +2,9 @@ using System;
 
 namespace Xin.Core.Utils
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class Snowflake
     {
         private static readonly object _lock = new object();
@@ -18,15 +21,19 @@ namespace Xin.Core.Utils
         /// <summary>
         ///     初始化机器码,范围0-31,如果超过范围,则WorkID等于0
         /// </summary>
-        /// <param name="workID"></param>
-        public Snowflake(long workID)
+        /// <param name="workId"></param>
+        public Snowflake(long workId)
         {
-            _workId = workID >= _maxWorkID ? 0 : workID;
+            _workId = workId >= _maxWorkID ? 0 : workId;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public static long GenerateId()
         {
-            return _instance.NewID();
+            return _instance.NewId();
         }
 
 
@@ -34,22 +41,22 @@ namespace Xin.Core.Utils
         ///     生成新的ID
         /// </summary>
         /// <returns></returns>
-        public long NewID()
+        public long NewId()
         {
             lock (_lock)
             {
                 var ticks = GetTicks();
-                ResetFlowID(ticks);
-                var flowID = GetFlowID();
+                ResetFlowId(ticks);
+                var flowId = GetFlowId();
                 // 如果流水号溢出,重新获取时间戳
-                if (flowID >= _maxFlowID)
+                if (flowId >= _maxFlowID)
                 {
                     ticks = GetNextTicks();
-                    ResetFlowID(ticks);
-                    flowID = GetFlowID();
+                    ResetFlowId(ticks);
+                    flowId = GetFlowId();
                 }
 
-                return ticks | GetWorkID() | flowID;
+                return ticks | GetWorkId() | flowId;
             }
         }
 
@@ -57,7 +64,7 @@ namespace Xin.Core.Utils
         ///     重置流水号
         /// </summary>
         /// <param name="ticks"></param>
-        private void ResetFlowID(long ticks)
+        private void ResetFlowId(long ticks)
         {
             if (ticks > _lastTicks)
             {
@@ -94,7 +101,7 @@ namespace Xin.Core.Utils
         ///     获取机器ID(5位)
         /// </summary>
         /// <returns></returns>
-        private long GetWorkID()
+        private long GetWorkId()
         {
             return _workId << 3;
         }
@@ -103,7 +110,7 @@ namespace Xin.Core.Utils
         ///     获取流水号(3位)
         /// </summary>
         /// <returns></returns>
-        private long GetFlowID()
+        private long GetFlowId()
         {
             return _lastFlowId++;
         }

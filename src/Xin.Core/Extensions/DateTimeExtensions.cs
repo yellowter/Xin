@@ -51,8 +51,7 @@ namespace Xin.Core.Extensions
         /// <returns></returns>
         public static string ToStandardString(this DateTime? source)
         {
-            if (source == null) return null;
-            return source.Value.ToStandardString();
+            return source?.ToStandardString();
         }
 
         /// <summary>

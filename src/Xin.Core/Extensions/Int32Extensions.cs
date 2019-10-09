@@ -23,6 +23,7 @@ namespace Xin.Core.Extensions
             }
             catch
             {
+                // ignored
             }
 
             return defaultValue;
@@ -44,6 +45,7 @@ namespace Xin.Core.Extensions
             }
             catch
             {
+                // ignored
             }
 
             return defaultValue;
