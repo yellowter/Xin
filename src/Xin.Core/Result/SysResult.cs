@@ -35,4 +35,23 @@
         /// </summary>
         public T Data { get; set; }
     }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class PageSysResult<T> : SysResult
+    {
+        /// <summary>
+        ///     返回结果
+        /// </summary>
+        public T Data { get; set; }
+
+
+        /// <summary>
+        /// 记录数
+        /// </summary>
+        public int Count { get; set; }
+    }
 }
