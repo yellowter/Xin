@@ -91,7 +91,7 @@ namespace Xin.AspNetCore.MiddleWares.CustomCodeHandle
                     var handleType = _option.HandleType;
                     if (handleType == CustomHandleType.Both) //根据Url关键字决定异常处理方式
                     {
-                        handleType = _option.HandleCodeUrlKeys != null && _option.HandleCodeUrlKeys.Count(
+                        handleType = _option.HandleCodeUrls != null && _option.HandleCodeUrls.Count(
                                          k => context.Request.Path.StartsWithSegments(k,
                                              StringComparison.CurrentCultureIgnoreCase)) > 0
                             ? CustomHandleType.HttpCodeHandle

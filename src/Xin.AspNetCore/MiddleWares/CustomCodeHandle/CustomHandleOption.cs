@@ -14,12 +14,12 @@ namespace Xin.AspNetCore.MiddleWares.CustomCodeHandle
         /// </summary>
         public CustomHandleOption(
             CustomHandleType handleType = CustomHandleType.HttpCodeHandle,
-            IList<PathString> handleCodeUrlKeys = null,
+            IList<PathString> handleCodeUrls = null,
             Dictionary<int, PathString> handleCodes = null,
             Action<HttpContext, Exception> onHandle = null)
         {
             HandleType = handleType;
-            HandleCodeUrlKeys = handleCodeUrlKeys;
+            HandleCodeUrls = handleCodeUrls;
             HandleCodes = handleCodes;
             OnHandle = onHandle;
         }
@@ -33,7 +33,7 @@ namespace Xin.AspNetCore.MiddleWares.CustomCodeHandle
         /// code处理方式的Url关键字
         /// <para>仅HandleType=Both时生效</para>
         /// </summary>
-        public IList<PathString> HandleCodeUrlKeys { get; set; }
+        public IList<PathString> HandleCodeUrls { get; set; }
 
         /// <summary>
         /// 需要处理的code和错误处理跳转url

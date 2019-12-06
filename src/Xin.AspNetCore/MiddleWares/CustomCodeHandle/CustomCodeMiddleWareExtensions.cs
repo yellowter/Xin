@@ -30,7 +30,7 @@ namespace Xin.AspNetCore.MiddleWares.CustomCodeHandle
                     {404, null},
                     {500, null}
                 },
-                HandleCodeUrlKeys = new PathString[] {"/api"}
+                HandleCodeUrls = new PathString[] {"/api"}
             };
             options?.Invoke(option);
             return app.UseMiddleware<CustomCodeHandleMiddleWare>(option);
