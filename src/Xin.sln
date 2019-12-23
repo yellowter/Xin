@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xin.AspNetCore", "Xin.AspNe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EAAC5933-6A73-49EE-8656-881C0A76CC40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Web", "Test.Web\Test.Web.csproj", "{6F6D282B-22DB-4800-91F8-D435E4235385}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,5 +28,12 @@ Global
 		{93878A9D-0830-4A85-85DC-F6DB54929D12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93878A9D-0830-4A85-85DC-F6DB54929D12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93878A9D-0830-4A85-85DC-F6DB54929D12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F6D282B-22DB-4800-91F8-D435E4235385}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F6D282B-22DB-4800-91F8-D435E4235385}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F6D282B-22DB-4800-91F8-D435E4235385}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F6D282B-22DB-4800-91F8-D435E4235385}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6F6D282B-22DB-4800-91F8-D435E4235385} = {EAAC5933-6A73-49EE-8656-881C0A76CC40}
 	EndGlobalSection
 EndGlobal

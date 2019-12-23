@@ -28,4 +28,12 @@
       <_ContentIncludedByDefault Remove="wwwroot\favicon.ico" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Filters" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Xin.Core\Xin.Core.csproj" />
+    </ItemGroup>
+
 </Project>
