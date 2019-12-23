@@ -2,10 +2,22 @@ using System;
 
 namespace Xin.Core.Attributes
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public enum DefaultDependencyInjectionType
     {
+        /// <summary>
+        /// 
+        /// </summary>
         Transient,
+        /// <summary>
+        /// 
+        /// </summary>
         Scoped,
+        /// <summary>
+        /// 
+        /// </summary>
         Singleton
     }
 

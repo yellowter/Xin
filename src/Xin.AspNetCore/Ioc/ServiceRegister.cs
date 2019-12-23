@@ -7,7 +7,7 @@ using Xin.Core.Attributes;
 
 namespace Xin.AspNetCore.Ioc
 {
-    public static class ServiceRegister
+    internal static class ServiceRegister
     {
         /// <summary>
         /// 反射注册
