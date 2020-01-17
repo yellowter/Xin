@@ -3,7 +3,7 @@ using System;
 namespace Xin.Core.Attributes
 {
     /// <summary>
-    /// 
+    /// 注册类型
     /// </summary>
     public enum DefaultDependencyInjectionType
     {
@@ -11,10 +11,12 @@ namespace Xin.Core.Attributes
         /// 
         /// </summary>
         Transient,
+
         /// <summary>
         /// 
         /// </summary>
         Scoped,
+
         /// <summary>
         /// 
         /// </summary>

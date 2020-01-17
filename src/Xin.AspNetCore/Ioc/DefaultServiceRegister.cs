@@ -7,23 +7,22 @@ using Xin.Core.Attributes;
 
 namespace Xin.AspNetCore.Ioc
 {
-    internal static class ServiceRegister
+    internal static class DefaultServiceRegister
     {
         /// <summary>
         /// 反射注册
         /// </summary>
         /// <param name="services"></param>
         /// <param name="assembly"></param>
-        /// <param name="serviceLifetime"></param>
         /// <returns></returns>
         internal static IServiceCollection AddAssemblyServices(IServiceCollection services, Assembly assembly)
         {
             var typeList = new List<Type>(); //所有符合注册条件的类集合
 
             var types = assembly.GetTypes()
-                .Where(t => t.IsClass && !t.IsGenericType //排除了泛型类
-                                      && (t.GetCustomAttributes(typeof(DefaultDependencyInjectionAttribute), true)
-                                          .Any())
+                .Where(t =>
+                    t.IsClass && !t.IsGenericType //排除了泛型类
+                              && t.GetCustomAttributes(typeof(DefaultDependencyInjectionAttribute), true).Any()
                 ).ToList();
 
             typeList.AddRange(types);
@@ -45,20 +44,13 @@ namespace Xin.AspNetCore.Ioc
 
                 if (diAttr == null) continue;
 
-                var serviceLifetime = ServiceLifetime.Scoped;
-
-                switch (diAttr.DependencyInjectionType)
+                var serviceLifetime = diAttr.DependencyInjectionType switch
                 {
-                    case DefaultDependencyInjectionType.Transient:
-                        serviceLifetime = ServiceLifetime.Transient;
-                        break;
-                    case DefaultDependencyInjectionType.Scoped:
-                        serviceLifetime = ServiceLifetime.Scoped;
-                        break;
-                    case DefaultDependencyInjectionType.Singleton:
-                        serviceLifetime = ServiceLifetime.Singleton;
-                        break;
-                }
+                    DefaultDependencyInjectionType.Transient => ServiceLifetime.Transient,
+                    DefaultDependencyInjectionType.Scoped => ServiceLifetime.Scoped,
+                    DefaultDependencyInjectionType.Singleton => ServiceLifetime.Singleton,
+                    _ => ServiceLifetime.Scoped
+                };
 
                 var interfaceTypeList = typeDic[instanceType];
 

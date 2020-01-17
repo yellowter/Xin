@@ -55,14 +55,14 @@ namespace Xin.Core.Extensions
         }
 
         /// <summary>
-        ///     将unix timestamp时间戳(秒) 转换为.NET的DateTime
+        ///     将unix timestamp时间戳(秒) 转换为本地时间
         /// </summary>
-        /// <param name="timeStamp"></param>
+        /// <param name="unixTimeStamp"></param>
         /// <returns></returns>
-        public static DateTime ToUnixDateTime(this long timeStamp)
+        public static DateTime ToUnixDateTime(this long unixTimeStamp)
         {
-            var now = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(timeStamp);
-            return TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local);
+            var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            return dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
         }
 
         /// <summary>

@@ -40,7 +40,7 @@ namespace Xin.Core.Extensions
                     }
                     else
                     {
-                        strText = field.Name;
+                        strText = field.Name; 
                     }
 
                     break;

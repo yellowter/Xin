@@ -4,6 +4,8 @@
         <OutputType>Library</OutputType>
         <TargetFrameworks>netcoreapp3.0;netcoreapp3.1</TargetFrameworks>
         <PackageVersion>0.1.0</PackageVersion>
+        <PackageProjectUrl>https://github.com/yellowter/Xin</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/yellowter/Xin</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>

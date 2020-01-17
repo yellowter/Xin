@@ -1,8 +1,10 @@
+using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Xin.AspNetCore.Ioc
 {
-    public static class ServiceRegisterExtension
+    public static class DefaultServiceRegisterExtension
     {
         /// <summary>
         /// 自定义服务注册
@@ -11,12 +13,12 @@ namespace Xin.AspNetCore.Ioc
         public static void AddCustomServices(this IServiceCollection services)
         {
             //注册Service
-            var asses = ServiceRegister.GetAllAssemblies();
+            var asses = DefaultServiceRegister.GetAllAssemblies();
             if (asses == null) return;
 
             foreach (var ass in asses)
             {
-                ServiceRegister.AddAssemblyServices(services, ass);
+                DefaultServiceRegister.AddAssemblyServices(services, ass);
             }
         }
     }
