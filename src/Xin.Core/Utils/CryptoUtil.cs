@@ -11,9 +11,9 @@ namespace Xin.Core.Utils
     public class CryptoUtil
     {
         /// <summary>
-        ///     3DES加解密的默认密钥, 前8位作为向量
+        /// 3DES加解密的默认密钥, 前8位作为向量
         /// </summary>
-        private const string KeyComplement = "Z!E@R#O$Z%H^E&N*G(L)I_N+G{J}U|N?";
+        private const string KEY_Complement = "Z!E@R#O$Z%H^E&N*G(L)I_N+G{J}U|N?";
 
         #region 密码加密
 
@@ -26,7 +26,7 @@ namespace Xin.Core.Utils
         {
             #region
 
-            var appkey = KeyComplement; //，。加一特殊的字符后再加密，这样更安全些
+            var appkey = KEY_Complement; //，。加一特殊的字符后再加密，这样更安全些
             //strpwd += appkey;
 
             MD5 MD5 = new MD5CryptoServiceProvider();
@@ -161,60 +161,61 @@ namespace Xin.Core.Utils
             }
         }
 
-        /// <summary>
-        ///     AES加密（加密步骤）
-        ///     1，加密字符串得到2进制数组；
-        ///     2，将2禁止数组转为16进制；
-        ///     3，进行base64编码
-        /// </summary>
-        /// <param name="toEncrypt">要加密的字符串</param>
-        /// <param name="key">密钥</param>
+        /// <summary>  
+        ///AES加密（加密步骤）  
+        ///1，加密字符串得到2进制数组；    
+        ///2，进行base64编码  
+        /// </summary>  
+        /// <param name="toEncrypt">要加密的字符串</param>  
+        /// <param name="key">密钥</param>  
         public static string AES_Encrypt(string toEncrypt, string key)
         {
-            var _Key = Encoding.ASCII.GetBytes(BuildKey(key, 32));
-            var _Source = Encoding.UTF8.GetBytes(toEncrypt);
+            byte[] _Key = Encoding.ASCII.GetBytes(BuildKey(key, 32));
+            byte[] _Source = Encoding.UTF8.GetBytes(toEncrypt);
+            ICryptoTransform cTransform = null;
+            using (Aes aes = Aes.Create("AES"))
+            {
+                aes.Mode = CipherMode.ECB;
+                aes.Padding = PaddingMode.PKCS7;
+                aes.Key = _Key;
+                cTransform = aes.CreateEncryptor();
+            }
 
-            var aes = Aes.Create("AES");
-            aes.Mode = CipherMode.ECB;
-            aes.Padding = PaddingMode.PKCS7;
-            aes.Key = _Key;
-            var cTransform = aes.CreateEncryptor();
-            var cryptData = cTransform.TransformFinalBlock(_Source, 0, _Source.Length);
-            var HexCryptString = Hex_2To16(cryptData);
-            var HexCryptData = Encoding.UTF8.GetBytes(HexCryptString);
-            var CryptString = Convert.ToBase64String(HexCryptData);
-            return CryptString;
+            byte[] cryptData = cTransform.TransformFinalBlock(_Source, 0, _Source.Length);
+            //string HexCryptString = Hex_2To16(cryptData);
+            //byte[] HexCryptData = Encoding.UTF8.GetBytes(HexCryptString);
+            return Convert.ToBase64String(cryptData);
         }
 
-        /// <summary>
-        ///     AES解密（解密步骤）
-        ///     1，将BASE64字符串转为16进制数组
-        ///     2，将16进制数组转为字符串
-        ///     3，将字符串转为2进制数据
-        ///     4，用AES解密数据
-        /// </summary>
-        /// <param name="encryptedSource">已加密的内容</param>
-        /// <param name="key">密钥</param>
+        /// <summary>  
+        /// AES解密（解密步骤）  
+        /// 1，将BASE64字符串转为数组  
+        /// 2，用AES解密数据  
+        /// </summary>  
+        /// <param name="encryptedSource">已加密的内容</param>  
+        /// <param name="key">密钥</param>  
         public static string AES_Decrypt(string encryptedSource, string key)
         {
-            var _Key = Encoding.ASCII.GetBytes(BuildKey(key, 32));
-            var aes = Aes.Create("AES");
-            aes.Mode = CipherMode.ECB;
-            aes.Padding = PaddingMode.PKCS7;
-            aes.Key = _Key;
-            var cTransform = aes.CreateDecryptor();
+            byte[] _Key = Encoding.ASCII.GetBytes(BuildKey(key, 32));
+            ICryptoTransform cTransform = null;
+            using (Aes aes = Aes.Create("AES"))
+            {
+                aes.Mode = CipherMode.ECB;
+                aes.Padding = PaddingMode.PKCS7;
+                aes.Key = _Key;
+                cTransform = aes.CreateDecryptor();
+            }
 
-            var encryptedData = Convert.FromBase64String(encryptedSource);
-            var encryptedString = Encoding.UTF8.GetString(encryptedData);
-            var _Source = Hex_16To2(encryptedString);
-            var originalSrouceData = cTransform.TransformFinalBlock(_Source, 0, _Source.Length);
-            var originalString = Encoding.UTF8.GetString(originalSrouceData);
-            return originalString;
+            byte[] encryptedData = Convert.FromBase64String(encryptedSource);
+            //string encryptedString = Encoding.UTF8.GetString(encryptedData);
+            //byte[] _Source = Hex_16To2(encryptedString);
+            byte[] originalSrouceData = cTransform.TransformFinalBlock(encryptedData, 0, encryptedData.Length);
+            return Encoding.UTF8.GetString(originalSrouceData);
         }
 
         private static string BuildKey(string key, int length = 8)
         {
-            return ((key ?? string.Empty) + KeyComplement).Substring(0, length);
+            return ((key ?? string.Empty) + KEY_Complement).Substring(0, length);
         }
 
         private static string Hex_2To16(byte[] bytes)
@@ -276,7 +277,7 @@ namespace Xin.Core.Utils
 
         #endregion
 
-        #region  MD5加密
+        #region MD5加密
 
         /// <summary>
         ///     标准MD5加密
@@ -336,7 +337,7 @@ namespace Xin.Core.Utils
 
         #endregion
 
-        #region  DES 加解密
+        #region DES 加解密
 
         /// <summary>
         ///     Desc加密 默认使用Mode=CBC,Padding=PKCS7,Encoding=UTF8
@@ -377,7 +378,7 @@ namespace Xin.Core.Utils
         /// <returns>密文</returns>
         public static string DES_Encrypt(string source)
         {
-            return DES_Encrypt(source, KeyComplement);
+            return DES_Encrypt(source, KEY_Complement);
         }
 
         /// <summary>
@@ -387,7 +388,7 @@ namespace Xin.Core.Utils
         /// <returns>明文</returns>
         public static string DES_Decrypt(string source)
         {
-            return DES_Decrypt(source, KeyComplement);
+            return DES_Decrypt(source, KEY_Complement);
         }
 
         /// <summary>

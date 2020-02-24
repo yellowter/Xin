@@ -25,7 +25,7 @@ namespace Xin.AspNetCore.Filters.RequestLock
             if (!(context.HttpContext.RequestServices.GetServices(typeof(ILockAction))
                 .FirstOrDefault(x => x.GetType() == _action) is ILockAction action))
             {
-                throw new NullReferenceException("action is null");
+                throw new NullReferenceException("requestServices LockAction is null");
             }
 
             if (await action.Lock(context))
